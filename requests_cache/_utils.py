@@ -54,6 +54,13 @@ def get_placeholder_class(original_exception: Exception = None):
     return Placeholder
 
 
+def get_valid_init_kwargs(obj, kwargs):
+    kwds = {}
+    for cls in set(type(obj).__mro__).difference({type(obj)}):
+        kwds.update(get_valid_kwargs(cls.__init__, kwargs))
+    return kwds
+
+
 def get_valid_kwargs(func: Callable, kwargs: Dict, extras: Iterable[str] = None) -> KwargDict:
     """Get the subset of non-None ``kwargs`` that are valid arguments for ``func``"""
     kwargs, _ = split_kwargs(func, kwargs, extras)

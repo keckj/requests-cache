@@ -9,7 +9,7 @@ from requests import Session as OriginalSession
 from requests.hooks import dispatch_hook
 from urllib3 import filepost
 
-from ._utils import get_valid_kwargs
+from ._utils import get_valid_init_kwargs
 from .backends import BackendSpecifier, init_backend
 from .models import AnyResponse, CachedResponse, OriginalResponse
 from .policy import (
@@ -75,7 +75,7 @@ class CacheMixin(MIXIN_BASE):
         self._lock = RLock()
 
         # If the mixin superclass is a custom Session, pass along any valid kwargs
-        super().__init__(**get_valid_kwargs(super().__init__, kwargs))  # type: ignore
+        super().__init__(**get_valid_init_kwargs(self, kwargs))  # type: ignore
 
     @property
     def settings(self) -> CacheSettings:
